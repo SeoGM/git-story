@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-// 인터페이스 정의
+// 커밋 데이터를 위한 인터페이스 정의
 interface Commit {
   sha: string;
   commit: {
@@ -14,36 +15,27 @@ interface Commit {
   html_url: string;
 }
 
+// 데이터를 가져오는 함수 정의 (타입을 명시적으로 설정)
+const fetchCommits = async (): Promise<Commit[]> => {
+  const { data } = await axios.get<Commit[]>('https://api.github.com/repos/facebook/react/commits');
+  return data;
+};
+
 const GitHubCommits: React.FC = () => {
-  const [commits, setCommits] = useState<Commit[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  // useQuery에서 제네릭 타입 설정
+  const { data, error, isLoading } = useQuery<Commit[]>({
+    queryKey: ['commits'],
+    queryFn: fetchCommits,
+  });
 
-  useEffect(() => {
-    const fetchCommits = async () => {
-      try {
-        const response = await axios.get(
-          'https://api.github.com/repos/facebook/react/commits'
-        );
-        setCommits(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch commits');
-        setLoading(false);
-      }
-    };
-
-    fetchCommits();
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (error instanceof Error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
-      <h1>Recent Commits</h1>
+      <h2>Recent Commits</h2>
       <ul>
-        {commits.map((commit) => (
+        {data?.map((commit) => (
           <li key={commit.sha}>
             <p><strong>Message:</strong> {commit.commit.message}</p>
             <p><strong>Author:</strong> {commit.commit.author.name}</p>

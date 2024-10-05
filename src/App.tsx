@@ -1,13 +1,20 @@
 import React from 'react';
-import './App.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GitHubCommits from './GitHubCommits';
+
+// QueryClient 생성
+const queryClient = new QueryClient();
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <h1>GitHub Commits Viewer</h1>
-      <GitHubCommits />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
+        <h1>GitHub Commits Viewer</h1>
+        <GitHubCommits />
+      </div>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 
