@@ -1,10 +1,10 @@
-import React from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import GitHubCommits from './GitHubCommits'
+import React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import GitHubCommits from "./GitHubCommits";
 
 // QueryClient 생성
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const App: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const App: React.FC = () => {
       </div>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  )
-}
+  );
+};
 
-export default App
+export default App;
