@@ -14,9 +14,10 @@ interface Commit {
   html_url: string;
 }
 
+// API URL을 SeoGM/git-story 레포지토리로 변경
 const fetchCommits = async (): Promise<Commit[]> => {
   const { data } = await axios.get<Commit[]>(
-    "https://api.github.com/repos/facebook/react/commits"
+    "https://api.github.com/repos/SeoGM/git-story/commits"
   );
   return data;
 };
