@@ -1,46 +1,39 @@
-# Getting Started with Create React App
+# GitHub Commit 기반 블로그 작성 앱
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1. 프로젝트 개요
 
-## Available Scripts
+GitHub 커밋 내용을 분석하고 블로그 글로 자동 변환해 주는 웹 애플리케이션을 개발합니다. 사용자는 GitHub OAuth를 통해 로그인하고 원하는 리포지토리와 커밋을 선택하여 AI의 도움을 받아 블로그 글을 작성할 수 있습니다. 이 앱은 개발자가 자신의 프로젝트 진행 상황을 블로그 형식으로 손쉽게 기록하고 공유할 수 있도록 돕는 것을 목표로 합니다.
 
-In the project directory, you can run:
+## 2. 주요 기능
 
-### `npm start`
+1. **GitHub OAuth 로그인**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+   - GitHub 계정을 통해 사용자가 간편하게 로그인합니다.
+   - 로그인 후 사용자의 GitHub 리포지토리에 접근할 수 있는 권한을 부여받습니다.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. **리포지토리 및 커밋 선택**
 
-### `npm test`
+   - 로그인 후 사용자 계정의 리포지토리를 목록으로 보여줍니다.
+   - 사용자는 특정 리포지토리와 커밋을 선택할 수 있습니다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. **AI 기반 블로그 글 생성**
 
-### `npm run build`
+   - 선택된 커밋의 메시지와 변경 내역을 AI가 분석하여 블로그 글로 요약하고 변환합니다.
+   - OpenAI API를 사용하여 자연스러운 글을 생성하며, 사용자는 필요에 따라 내용을 수정할 수 있습니다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. **블로그 편집 및 관리**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   - 생성된 블로그 글을 사용자가 직접 편집할 수 있는 인터페이스를 제공합니다.
+   - 블로그 글을 Markdown 형식으로 저장하거나 클라우드에 업로드할 수 있습니다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. **커밋 통계 시각화**
+   - 선택된 리포지토리의 커밋 통계를 차트로 시각화하여 프로젝트 진행 상황을 한눈에 파악할 수 있도록 합니다.
 
-### `npm run eject`
+## 3. 사용 기술 스택
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **프론트엔드**: React, TypeScript, Tailwind CSS
+- **상태 관리**: Redux
+- **데이터 페칭**: React Query
+- **OAuth 인증**: GitHub OAuth
+- **AI 글 생성**: OpenAI API
+- **차트 라이브러리**: Recharts 또는 Chart.js (미정 추후 직접 사용해보고 결정)
