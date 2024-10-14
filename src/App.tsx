@@ -1,38 +1,53 @@
-// src/App.tsx
-import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Header from "./layouts/Header";
 import LoginPage from "./pages/Login/LoginPage";
 import CommitsPage from "./pages/Commits/CommitsPage";
-import Callback from "./auth/Callback";
 
-const queryClient = new QueryClient();
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-const App: React.FC = () => {
-  const isLoggedIn = !!sessionStorage.getItem("access_token");
+  // 로그인 상태 확인 함수
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get(
+        "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us116.gitpod.io/profile",
+        {
+          withCredentials: true, // 쿠키 포함
+        }
+      );
+      if (response.status === 200) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    } catch (error) {
+      console.error("인증 오류:", error);
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route
-            path="/commits"
-            element={isLoggedIn ? <CommitsPage /> : <Navigate to="/" />}
-          />
-          <Route path="/callback" element={<Callback />} />{" "}
-        </Routes>
-      </Router>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/commits"
+          element={isLoggedIn ? <CommitsPage /> : <Navigate to="/" />}
+        />
+      </Routes>
+    </Router>
   );
 };
 
