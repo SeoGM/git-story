@@ -26,7 +26,7 @@
   "scripts": {
     "start": "concurrently \"npm run start-client\" \"npm run start-server\"",
     "start-client": "react-scripts start",
-    "start-server": "node server/index.js",
+    "start-server": "node server/index",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

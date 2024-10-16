@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import GitHubLoginButton from "../components/GitHubLoginButton";
 import UserStatus from "../components/UserStatus";
-import { AppDispatch, RootState } from "../store/store";
+import { RootState } from "../store/store";
 import { logout } from "../store/authSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const { user, isLoggedIn } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -18,10 +18,10 @@ const Header = () => {
       <nav>
         {isLoggedIn ? (
           <>
+            <p>{user.username}</p>
             <button onClick={handleLogout} className="btn btn-primary">
               Logout
             </button>
-            <UserStatus />
           </>
         ) : (
           <GitHubLoginButton />
