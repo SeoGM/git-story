@@ -56,9 +56,6 @@ app.get(
   "/auth/github/callback",
   passport.authenticate("github", { failureRedirect: "/", session: false }),
   (req, res) => {
-    // 사용자 정보 확인
-    console.log("Authenticated user:", req.user);
-
     // JWT 생성
     const token = jwt.sign(
       { id: req.user.id, username: req.user.username },
@@ -66,8 +63,12 @@ app.get(
       { expiresIn: "1h" }
     );
 
-    // 쿠키에 토큰 설정
-    res.cookie("token", token, { httpOnly: true });
+    // 쿠키에 토큰 설정 (secure와 sameSite 설정 포함)
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // HTTPS 환경에서만 작동
+      sameSite: "lax", // 동일 출처 요청에 대해 쿠키 전송
+    });
     res.redirect("https://3000-seogm-gitstory-1ayu6plkg6n.ws-us116.gitpod.io");
   }
 );
