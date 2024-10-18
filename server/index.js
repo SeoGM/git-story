@@ -58,7 +58,11 @@ app.get(
   (req, res) => {
     // JWT 생성
     const token = jwt.sign(
-      { id: req.user.id, username: req.user.username },
+      {
+        id: req.user.id,
+        username: req.user.username,
+        avatar_url: req.user.photos[0].value,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -81,7 +85,11 @@ app.get("/profile", (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.json({ id: decoded.id, username: decoded.username });
+    res.json({
+      id: decoded.id,
+      username: decoded.username,
+      avatar_url: decoded.avatar_url,
+    });
   } catch (error) {
     res.status(401).send("토큰이 유효하지 않습니다.");
   }

@@ -18,10 +18,17 @@ const Header = () => {
       <nav>
         {isLoggedIn ? (
           <>
-            <p>{user.username}</p>
-            <button onClick={handleLogout} className="btn btn-primary">
-              Logout
-            </button>
+            <div className="flex items-center space-x-2">
+              <img
+                src={user.avatar_url}
+                alt={`${user.username} avatar`}
+                className="w-8 h-8 rounded-full"
+              />
+              <p>{user.username}</p>
+              <button onClick={handleLogout} className="btn btn-primary ml-4">
+                Logout
+              </button>
+            </div>
           </>
         ) : (
           <GitHubLoginButton />
