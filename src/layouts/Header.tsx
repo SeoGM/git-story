@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import GitHubLoginButton from "../components/GitHubLoginButton";
-import UserStatus from "../components/UserStatus";
 import { RootState } from "../store/store";
 import { logout } from "../store/authSlice";
 

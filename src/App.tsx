@@ -4,8 +4,8 @@ import { AppDispatch, RootState } from "./store/store";
 import { fetchUser } from "./store/authSlice";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./layouts/Header";
-import LoginPage from "./pages/Login/LoginPage";
-import CommitsPage from "./pages/Commits/CommitsPage";
+import { HomePage } from "./features/home";
+import { CommitListPage, CommitDetailPage } from "./features/commits";
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,9 +25,10 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={isLoggedIn ? <CommitsPage /> : <LoginPage />}
+          element={isLoggedIn ? <CommitListPage /> : <HomePage />}
         />
-        <Route path="*" element={<LoginPage />} />
+        <Route path="/commit/:commitHash" element={<CommitDetailPage />} />
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
   );
