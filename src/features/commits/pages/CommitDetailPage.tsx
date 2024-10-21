@@ -1,69 +1,58 @@
+import React from "react";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Commit } from "../types";
+import { useFetchCommitDetail } from "../hooks/useFetchCommitDetail";
 
 const CommitDetailPage = () => {
-  const { commitHash } = useParams();
-  const [commit, setCommit] = useState<Commit | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const fetchCommitDetails = async () => {
-      try {
-        const response = await fetch(
-          //   `https://api.github.com/repos/{owner}/{repo}/commits/${commitHash}`
-          `https://api.github.com/repos/SeoGM/git-story/commits/${commitHash}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch commit details");
-        }
-        const data = await response.json();
-        setCommit(data as Commit); // 데이터를 Commit 타입으로 캐스팅
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error);
-        } else {
-          setError(new Error("Unknown error occurred"));
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCommitDetails();
-  }, [commitHash]);
+  const { owner, repo, commitHash } = useParams(); // URL에서 파라미터로 owner, repo, commitHash 가져오기
+  const { commit, loading, error } = useFetchCommitDetail(
+    // owner!,
+    // repo!,
+    "SeoGM",
+    "git-story",
+    commitHash!
+  );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="text-center p-4">Loading commit details...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div className="text-center text-red-500 p-4">Error: {error}</div>;
   }
 
   return (
-    <div className="commit-detail">
-      <h2>Commit Details</h2>
-      {commit && (
-        <>
-          <p>Commit Hash: {commit.sha}</p>
-          <p>Author Name: {commit.commit.author.name}</p>
-          <p>Author GitHub Username: {commit.author.login}</p>
-          <p>Date: {commit.commit.author.date}</p>
-          <p>Message: {commit.commit.message}</p>
-          <div>
-            <h3>Files Changed:</h3>
-            <ul>
-              {commit.files.map(file => (
-                <li key={file.filename}>
-                  {file.filename} ({file.changes} changes)
-                </li>
-              ))}
-            </ul>
-          </div>
-        </>
-      )}
+    <div className="container mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-4">Commit Details</h2>
+      <p>
+        <strong>Commit Hash:</strong> {commit.sha}
+      </p>
+      <p>
+        <strong>Author:</strong> {commit.commit.author.name}
+      </p>
+      <p>
+        <strong>Date:</strong> {commit.commit.author.date}
+      </p>
+      <p>
+        <strong>Message:</strong> {commit.commit.message}
+      </p>
+
+      <h3 className="text-xl font-semibold mt-6">Changed Files</h3>
+      <ul className="mt-4 space-y-4">
+        {commit.files.map((file: any) => (
+          <li
+            key={file.filename}
+            className="bg-gray-50 border border-gray-200 p-4 rounded-lg"
+          >
+            <strong className="block text-lg">{file.filename}</strong>
+            <span className="block text-sm text-gray-600">
+              {file.status} ({file.changes} changes)
+            </span>
+            <pre className="diff mt-2 bg-gray-900 text-white p-4 rounded-lg overflow-x-auto whitespace-pre-wrap">
+              {file.patch}
+            </pre>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
