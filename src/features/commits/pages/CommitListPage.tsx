@@ -4,12 +4,12 @@ import { useFetchCommits } from "../hooks/useFetchCommits";
 import CommitItem from "../components/CommitItem";
 
 const CommitListPage = () => {
-  const { commits, loading, error } = useFetchCommits(
+  const { commits, isLoading, error } = useFetchCommits(
     // "https://api.github.com/repos/{owner}/{repo}/commits"
     "https://api.github.com/repos/SeoGM/git-story/commits"
   );
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading commits...</div>;
   }
 
