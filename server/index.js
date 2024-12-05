@@ -13,7 +13,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://3000-seogm-gitstory-1ayu6plkg6n.ws-us116.gitpod.io",
+      "https://3000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io",
       "http://localhost:3000",
     ],
     credentials: true,
@@ -32,7 +32,7 @@ passport.use(
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL:
-        "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us116.gitpod.io/auth/github/callback",
+        "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io/auth/github/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
@@ -73,7 +73,7 @@ app.get(
       secure: true, // HTTPS 환경에서만 작동
       sameSite: "lax", // 동일 출처 요청에 대해 쿠키 전송
     });
-    res.redirect("https://3000-seogm-gitstory-1ayu6plkg6n.ws-us116.gitpod.io");
+    res.redirect("https://3000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io");
   }
 );
 
@@ -98,6 +98,6 @@ app.get("/profile", (req, res) => {
 // 서버 시작
 app.listen(4000, () => {
   console.log(
-    "Backend server is running on https://4000-seogm-gitstory-1ayu6plkg6n.ws-us116.gitpod.io"
+    "Backend server is running on https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io"
   );
 });
