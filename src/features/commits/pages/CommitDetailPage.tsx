@@ -4,7 +4,12 @@ import { useFetchCommitDetail } from "../hooks/useFetchCommitDetail";
 
 const CommitDetailPage = () => {
   const { owner, repo, commitHash } = useParams(); // URL에서 파라미터로 owner, repo, commitHash 가져오기
-  const { commit, loading, error } = useFetchCommitDetail(
+  const {
+    data: commit,
+    isLoading,
+    isError,
+    error,
+  } = useFetchCommitDetail(
     // owner!,
     // repo!,
     "SeoGM",
@@ -12,12 +17,16 @@ const CommitDetailPage = () => {
     commitHash!
   );
 
-  if (loading) {
+  if (isLoading) {
     return <div className="text-center p-4">Loading commit details...</div>;
   }
 
-  if (error) {
-    return <div className="text-center text-red-500 p-4">Error: {error}</div>;
+  if (isError) {
+    return (
+      <div className="text-center text-red-500 p-4">
+        Error: {error?.message}
+      </div>
+    );
   }
 
   return (
