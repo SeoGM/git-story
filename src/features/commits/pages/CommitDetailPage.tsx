@@ -5,19 +5,29 @@ import { useGenerateBlogPost } from "../hooks/useGenerateBlogPost";
 import BlogPostPreview from "../components/BlogPostPreview";
 
 const CommitDetailPage = () => {
-  const { owner, repo, commitHash } = useParams(); // URL에서 파라미터로 owner, repo, commitHash 가져오기
+  const { owner, repo, commitHash } = useParams(); 
   const {
     data: commit,
     isLoading,
     isError,
     error,
   } = useFetchCommitDetail(
-    // owner!,
-    // repo!,
-    "SeoGM",
-    "git-story",
+    owner || "SeoGM",
+    repo || "git-story",
     commitHash!
   );
+
+  const [generatedPost, setGeneratedPost] = useState<string | null>(null);
+  const { generatePost, isLoading: isGenerating } = useGenerateBlogPost();
+
+  const handleGeneratePost = async () => {
+    try {
+      const post = await generatePost(commit?.commit?.message || "");
+      setGeneratedPost(post);
+    } catch (error) {
+      console.error("Error generating blog post:", error);
+    }
+  };
 
   if (isLoading) {
     return <div className="text-center p-4">Loading commit details...</div>;
@@ -26,17 +36,14 @@ const CommitDetailPage = () => {
   if (isError) {
     return (
       <div className="text-center text-red-500 p-4">
-        Error: {error?.message}
+        Error: {error?.message || "An unknown error occurred."}
       </div>
     );
   }
 
-  const [generatedPost, setGeneratedPost] = useState<string | null>(null);
-  const { generatePost, isLoading: isGenerating } = useGenerateBlogPost();
-  const handleGeneratePost = async () => {
-    const post = await generatePost(commit.commit.message);
-    setGeneratedPost(post);
-  };
+  if (!commit) {
+    return <div className="text-center p-4">No commit data available.</div>;
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -70,11 +77,15 @@ const CommitDetailPage = () => {
           >
             <strong className="block text-lg">{file.filename}</strong>
             <span className="block text-sm text-gray-600">
-              {file.status} ({file.changes} changes)
+              {file.status || "Unknown status"} ({file.changes || 0} changes)
             </span>
-            <pre className="diff mt-2 bg-gray-900 text-white p-4 rounded-lg overflow-x-auto whitespace-pre-wrap">
-              {file.patch}
-            </pre>
+            {file.patch ? (
+              <pre className="diff mt-2 bg-gray-900 text-white p-4 rounded-lg overflow-x-auto whitespace-pre-wrap">
+                {file.patch}
+              </pre>
+            ) : (
+              <p className="text-sm text-gray-500">No patch available</p>
+            )}
           </li>
         ))}
       </ul>
