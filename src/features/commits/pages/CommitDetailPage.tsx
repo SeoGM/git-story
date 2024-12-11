@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useFetchCommitDetail } from "../hooks/useFetchCommitDetail";
+import { useGenerateBlogPost } from "../hooks/useGenerateBlogPost";
+import BlogPostPreview from "../components/BlogPostPreview";
 
 const CommitDetailPage = () => {
   const { owner, repo, commitHash } = useParams(); // URL에서 파라미터로 owner, repo, commitHash 가져오기
@@ -29,9 +31,23 @@ const CommitDetailPage = () => {
     );
   }
 
+  const [generatedPost, setGeneratedPost] = useState<string | null>(null);
+  const { generatePost, isLoading: isGenerating } = useGenerateBlogPost();
+  const handleGeneratePost = async () => {
+    const post = await generatePost(commit.commit.message);
+    setGeneratedPost(post);
+  };
+
   return (
     <div className="container mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Commit Details</h2>
+      <button
+        onClick={handleGeneratePost}
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+        disabled={isGenerating}
+      >
+        {isGenerating ? "Generating..." : "Generate Blog Post"}
+      </button>
       <p>
         <strong>Commit Hash:</strong> {commit.sha}
       </p>
@@ -62,6 +78,8 @@ const CommitDetailPage = () => {
           </li>
         ))}
       </ul>
+
+      {generatedPost && <BlogPostPreview content={generatedPost} />}
     </div>
   );
 };
