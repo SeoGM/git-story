@@ -13,6 +13,7 @@ const app = express();
 app.use(
   cors({
     origin: [
+      "https://git-story-rouge.vercel.app",
       "https://3000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io",
       "http://localhost:3000",
     ],
@@ -25,14 +26,18 @@ app.use(cookieParser());
 // Passport 초기화
 app.use(passport.initialize());
 
+const callbackURL =
+  process.env.APP_ENV === "vercel"
+    ? "https://git-story-rouge.vercel.app/auth/github/callback"
+    : "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io/auth/github/callback";
+
 // GitHub Strategy 설정
 passport.use(
   new GitHubStrategy(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL:
-        "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io/auth/github/callback",
+      callbackURL: callbackURL,
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
@@ -73,7 +78,13 @@ app.get(
       secure: true, // HTTPS 환경에서만 작동
       sameSite: "lax", // 동일 출처 요청에 대해 쿠키 전송
     });
-    res.redirect("https://3000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io");
+
+    const redirectURL =
+      process.env.APP_ENV === "vercel"
+        ? "https://git-story-rouge.vercel.app"
+        : "https://3000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io";
+
+    res.redirect(redirectURL);
   }
 );
 
@@ -97,7 +108,5 @@ app.get("/profile", (req, res) => {
 
 // 서버 시작
 app.listen(4000, () => {
-  console.log(
-    "Backend server is running on https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io"
-  );
+  console.log("Backend server is running");
 });
