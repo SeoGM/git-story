@@ -6,17 +6,6 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-// 테스트 코드
-async function main() {
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [{ role: "user", content: "Say this is a test" }],
-    model: "gpt-3.5-turbo",
-  });
-}
-
-main();
-//
-
 export const fetchOpenAISummary = async (prompt: string): Promise<string> => {
   try {
     const response = await openai.chat.completions.create({

@@ -5,17 +5,13 @@ import { useGenerateBlogPost } from "../hooks/useGenerateBlogPost";
 import BlogPostPreview from "../components/BlogPostPreview";
 
 const CommitDetailPage = () => {
-  const { owner, repo, commitHash } = useParams(); 
+  const { owner, repo, commitHash } = useParams();
   const {
     data: commit,
     isLoading,
     isError,
     error,
-  } = useFetchCommitDetail(
-    owner || "SeoGM",
-    repo || "git-story",
-    commitHash!
-  );
+  } = useFetchCommitDetail(owner || "SeoGM", repo || "git-story", commitHash!);
 
   const [generatedPost, setGeneratedPost] = useState<string | null>(null);
   const { generatePost, isLoading: isGenerating } = useGenerateBlogPost();
