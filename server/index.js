@@ -8,7 +8,12 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
+// React의 빌드 파일 제공
+app.use(express.static(path.join(__dirname, "../build")));
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
 // CORS 설정
 app.use(
   cors({
