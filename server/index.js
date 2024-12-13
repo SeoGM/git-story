@@ -20,7 +20,6 @@ app.use(
     origin: [
       "https://git-story-rouge.vercel.app",
       "https://3000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io",
-      "http://localhost:3000",
     ],
     credentials: true,
   })
@@ -33,8 +32,8 @@ app.use(passport.initialize());
 
 const callbackURL =
   process.env.REACT_APP_APP_ENV === "vercel"
-    ? "https://git-story-rouge.vercel.app/auth/github/callback"
-    : "http://localhost:4000/auth/github/callback";
+    ? "https://git-story-rouge.vercel.app/api/auth/github/callback"
+    : "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io/api/auth/github/callback";
 
 // GitHub Strategy 설정
 passport.use(
@@ -64,11 +63,11 @@ app.get("/api/hello", (req, res) => {
 });
 
 // GitHub로 로그인 라우트
-app.get("/auth/github", passport.authenticate("github"));
+app.get("/api/auth/github", passport.authenticate("github"));
 
 // GitHub 콜백 라우트
 app.get(
-  "/auth/github/callback",
+  "/api/auth/github/callback",
   passport.authenticate("github", { failureRedirect: "/", session: false }),
   (req, res) => {
     // JWT 생성
@@ -92,14 +91,14 @@ app.get(
     const redirectURL =
       process.env.REACT_APP_APP_ENV === "vercel"
         ? "https://git-story-rouge.vercel.app"
-        : "http://localhost:3000";
+        : "https://3000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io";
 
     res.redirect(redirectURL);
   }
 );
 
 // 인증된 사용자 정보 확인 라우트
-app.get("/profile", (req, res) => {
+app.get("/api/profile", (req, res) => {
   const token = req.cookies.token;
 
   if (!token) return res.status(401).send("로그인이 필요합니다.");
