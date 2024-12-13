@@ -53,6 +53,10 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello from Express!" });
+});
+
 // GitHub로 로그인 라우트
 app.get("/auth/github", passport.authenticate("github"));
 
