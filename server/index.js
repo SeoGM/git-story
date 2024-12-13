@@ -4,16 +4,16 @@ const GitHubStrategy = require("passport-github").Strategy;
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require("path");
+const serverless = require("serverless-http");
 
 require("dotenv").config();
 
 const app = express();
-// React의 빌드 파일 제공
+
+// React의 빌드 파일 제공 (정적 파일 경로 설정)
 app.use(express.static(path.join(__dirname, "../build")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
 // CORS 설정
 app.use(
   cors({
@@ -34,7 +34,7 @@ app.use(passport.initialize());
 const callbackURL =
   process.env.APP_ENV === "vercel"
     ? "https://git-story-rouge.vercel.app/auth/github/callback"
-    : "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io/auth/github/callback";
+    : "http://localhost:4000/auth/github/callback";
 
 // GitHub Strategy 설정
 passport.use(
@@ -58,6 +58,7 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
+// API 라우트 예제
 app.get("/api/hello", (req, res) => {
   res.json({ message: "Hello from Express!" });
 });
@@ -81,17 +82,17 @@ app.get(
       { expiresIn: "1h" }
     );
 
-    // 쿠키에 토큰 설정 (secure와 sameSite 설정 포함)
+    // 쿠키에 토큰 설정
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // HTTPS 환경에서만 작동
-      sameSite: "lax", // 동일 출처 요청에 대해 쿠키 전송
+      secure: true,
+      sameSite: "lax",
     });
 
     const redirectURL =
       process.env.APP_ENV === "vercel"
         ? "https://git-story-rouge.vercel.app"
-        : "https://3000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io";
+        : "http://localhost:3000";
 
     res.redirect(redirectURL);
   }
@@ -115,7 +116,21 @@ app.get("/profile", (req, res) => {
   }
 });
 
-// 서버 시작
-app.listen(4000, () => {
-  console.log("Backend server is running");
+// React의 index.html 제공 (SPA 지원)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
+
+// 로컬 실행용 포트
+const PORT = process.env.PORT || 4000;
+
+// Vercel Serverless 함수용 Export
+module.exports = app;
+module.exports.handler = serverless(app);
+
+// 로컬에서 실행
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
