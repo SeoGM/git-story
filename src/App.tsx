@@ -8,7 +8,7 @@ import { HomePage } from "./features/home";
 import { CommitListPage, CommitDetailPage } from "./features/commits";
 
 const App = () => {
-  console.log("process.env.APP_ENV", process.env.APP_ENV);
+  console.log("process.env.APP_ENV", process.env.REACT_APP_APP_ENV);
   const dispatch = useDispatch<AppDispatch>();
   const { isLoggedIn, status } = useSelector((state: RootState) => state.auth);
 

@@ -32,7 +32,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 const callbackURL =
-  process.env.APP_ENV === "vercel"
+  process.env.REACT_APP_APP_ENV === "vercel"
     ? "https://git-story-rouge.vercel.app/auth/github/callback"
     : "http://localhost:4000/auth/github/callback";
 
@@ -40,8 +40,8 @@ const callbackURL =
 passport.use(
   new GitHubStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientID: process.env.REACT_APP_GITHUB_CLIENT_ID,
+      clientSecret: process.env.REACT_APP_GITHUB_CLIENT_SECRET,
       callbackURL: callbackURL,
     },
     (accessToken, refreshToken, profile, done) => {
@@ -78,7 +78,7 @@ app.get(
         username: req.user.username,
         avatar_url: req.user.photos[0].value,
       },
-      process.env.JWT_SECRET,
+      process.env.REACT_APP_JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -90,7 +90,7 @@ app.get(
     });
 
     const redirectURL =
-      process.env.APP_ENV === "vercel"
+      process.env.REACT_APP_APP_ENV === "vercel"
         ? "https://git-story-rouge.vercel.app"
         : "http://localhost:3000";
 
@@ -105,7 +105,7 @@ app.get("/profile", (req, res) => {
   if (!token) return res.status(401).send("로그인이 필요합니다.");
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET);
     res.json({
       id: decoded.id,
       username: decoded.username,
@@ -122,7 +122,7 @@ app.get("*", (req, res) => {
 });
 
 // 로컬 실행용 포트
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.REACT_APP_PORT || 4000;
 
 // Vercel Serverless 함수용 Export
 module.exports = app;
