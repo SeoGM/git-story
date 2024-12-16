@@ -115,6 +115,16 @@ app.get("/api/profile", (req, res) => {
   }
 });
 
+// 로그아웃
+app.get("/api/auth/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
+  res.status(200).send({ message: "로그아웃 성공" });
+});
+
 // React의 index.html 제공 (SPA 지원)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../build", "index.html"));
