@@ -1,8 +1,13 @@
 import axios from "axios";
 
+const baseURL =
+  process.env.REACT_APP_APP_ENV === "vercel"
+    ? "https://git-story-rouge.vercel.app"
+    : "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io";
+
 const api = axios.create({
-  baseURL: "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io",
-  withCredentials: true, // 쿠키 포함 설정
+  baseURL: baseURL,
+  withCredentials: true,
 });
 
 export default api;
