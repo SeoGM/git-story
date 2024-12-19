@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const passport = require("passport");
 const GitHubStrategy = require("passport-github").Strategy;
@@ -6,8 +7,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
 const serverless = require("serverless-http");
-
-require("dotenv").config();
 
 const app = express();
 
@@ -74,8 +73,8 @@ app.get(
     const token = jwt.sign(
       {
         id: req.user.id,
-        username: req.user.username,
-        avatar_url: req.user.photos[0].value,
+        name: req.user.username,
+        avatar: req.user.photos[0].value,
       },
       process.env.REACT_APP_JWT_SECRET,
       { expiresIn: "1h" }
@@ -98,7 +97,7 @@ app.get(
 );
 
 // 인증된 사용자 정보 확인 라우트
-app.get("/api/profile", (req, res) => {
+app.get("/api/auth/profile", (req, res) => {
   const token = req.cookies.token;
 
   if (!token) return res.status(401).send("로그인이 필요합니다.");
