@@ -106,8 +106,8 @@ app.get("/api/auth/profile", (req, res) => {
     const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET);
     res.json({
       id: decoded.id,
-      username: decoded.username,
-      avatar_url: decoded.avatar_url,
+      name: decoded.username,
+      avatar: decoded.avatar_url,
     });
   } catch (error) {
     res.status(401).send("토큰이 유효하지 않습니다.");

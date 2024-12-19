@@ -45,7 +45,9 @@ const Header = () => {
             </div>
           </>
         ) : (
-          <button onClick={() => redirectToGithubLogin()}>Login with GitHub</button>
+          <button onClick={() => redirectToGithubLogin()}>
+            Login with GitHub
+          </button>
         )}
       </nav>
     </header>
