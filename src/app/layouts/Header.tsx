@@ -15,11 +15,12 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const response = await logoutRequest();
-      console.log("Logout response:", response); // 응답 확인
-      dispatch(logout()); // Redux 상태 초기화
-      navigate("/"); // 홈 화면으로 리디렉션
+      if (response.status === 200) {
+        dispatch(logout());
+        navigate("/");
+      }
     } catch (error) {
-      console.error("Logout failed:", error); // 오류 메시지 출력
+      console.error("Logout failed:", error);
     }
   };
 

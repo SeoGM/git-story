@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { UserProfile } from "../../features/auth/types";
 import api, { baseURL } from "./index";
 
@@ -10,7 +11,7 @@ export const fetchUserProfile = async (): Promise<UserProfile> => {
   return response.data;
 };
 
-export const logoutRequest = async (): Promise<void> => {
+export const logoutRequest = async (): Promise<AxiosResponse<any, any>> => {
   const response = await api.get("/api/auth/logout");
-  return response.data;
+  return response;
 };
