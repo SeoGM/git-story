@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { UserProfile } from "./types";
 
 interface AuthState {
   isAuthenticated: boolean;
-  user: { name: string; avatar: string } | null;
+  user: UserProfile | null;
 }
 
 const initialAuthState: AuthState = {

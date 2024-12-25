@@ -1,5 +1,5 @@
 export interface UserProfile {
   id: string;
-  name: string;
-  avatar: string;
+  username: string;
+  avatar_url: string;
 }

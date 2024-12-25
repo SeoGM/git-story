@@ -32,11 +32,11 @@ const Header = () => {
           <>
             <div className="flex items-center space-x-2">
               <img
-                src={user.avatar}
-                alt={`${user.name} avatar`}
+                src={user.avatar_url}
+                alt={`${user.username} avatar`}
                 className="w-8 h-8 rounded-full"
               />
-              <p>{user.name}</p>
+              <p>{user.username}</p>
               <button
                 onClick={() => handleLogout()}
                 className="btn btn-primary ml-4"

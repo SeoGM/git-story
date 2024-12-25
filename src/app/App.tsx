@@ -7,6 +7,7 @@ import { login, logout } from "../features/auth/authSlice";
 import Header from "./layouts/Header";
 import PublicPage from "../features/public/pages/PublicPage";
 import { RootState } from "./store";
+import { RecentCommitsPage } from "../features/git/pages/RecentCommitsPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={isAuthenticated ? <div>로그인됨</div> : <PublicPage />}
+          element={isAuthenticated ? <RecentCommitsPage /> : <PublicPage />}
         />
       </Routes>
     </Router>
