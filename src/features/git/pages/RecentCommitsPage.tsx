@@ -6,7 +6,7 @@ import { fetchTodayLatestCommit } from "../../../app/api/gitApi";
 export const RecentCommitsPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const { data, isLoading, error } = useQuery({
+  const { data: commits, isLoading, error } = useQuery({
     queryKey: ["latestCommit", user?.username],
     queryFn: () => fetchTodayLatestCommit(user!.username),
     enabled: !!user,
@@ -22,19 +22,17 @@ export const RecentCommitsPage = () => {
 
   return (
     <div>
-      <h3>Today&apos;s Latest Commit</h3>
-      {data ? (
-        <div>
-          <p>
-            <strong>Message:</strong> {data.message}
-          </p>
-          <p>
-            <strong>Repository:</strong> {data.repo}
-          </p>
-          <p>
-            <strong>Date:</strong> {new Date(data.date).toLocaleString()}
-          </p>
-        </div>
+      <h3>Latest Commit</h3>
+      {commits?.length > 0 ? (
+        <ul>
+          {commits.map((commit: any, index: number) => (
+            <li key={index} style={{ marginBottom: '1em' }}>
+              <p><strong>Message:</strong> {commit.message}</p>
+              <p><strong>Repository:</strong> {commit.repo}</p>
+              <p><strong>Date:</strong> {new Date(commit.pushed_at).toLocaleString()}</p>
+            </li>
+          ))}
+        </ul>
       ) : (
         <p>No commits found for today.</p>
       )}

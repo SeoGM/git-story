@@ -23,25 +23,22 @@ export const fetchTodayLatestCommit = async (username: string) => {
   try {
     const events = await fetchUserEvents(username);
 
-    const today = new Date().toISOString().split("T")[0];
-
     const pushEvents = events.filter(
       (event: any) => event.type === "PushEvent"
     );
-    const todayCommits = pushEvents
-      .flatMap((event: any) => {
-        return event.payload.commits.map((commit: any) => ({
-          ...commit,
-          repo: event.repo.name,
-          pushed_at: event.created_at,
-        }));
-      })
-      .filter((commit: any) => commit.pushed_at.startsWith(today));
 
-    const latestCommit = todayCommits.sort(
+    const commits = pushEvents.flatMap((event: any) => {
+      return event.payload.commits.map((commit: any) => ({
+        ...commit,
+        repo: event.repo.name,
+        pushed_at: event.created_at,
+      }));
+    });
+
+    const latestCommit = commits.sort(
       (a: any, b: any) =>
         new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime()
-    )[0];
+    );
 
     return latestCommit || null;
   } catch (error: any) {
