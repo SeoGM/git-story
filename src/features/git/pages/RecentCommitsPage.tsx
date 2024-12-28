@@ -40,9 +40,14 @@ export const RecentCommitsPage = () => {
       const allCommits = await Promise.all(
         repos.map((repo: any) =>
           fetchCommits(user.username, repo.name).then(data =>
-            data.filter((commit: any) =>
-              commit.commit.author.date.startsWith(today)
-            )
+            data
+              .filter((commit: any) =>
+                commit.commit.author.date.startsWith(today)
+              )
+              .map((commit: any) => ({
+                ...commit,
+                repoName: repo.name, // 저장소 이름 추가
+              }))
           )
         )
       );
@@ -101,6 +106,9 @@ export const RecentCommitsPage = () => {
         <ul>
           {commits.map((commit: any, index: number) => (
             <li key={commit.sha || index}>
+              <p>
+                <strong>Repository:</strong> {commit.repoName}
+              </p>
               <p>
                 <strong>Message:</strong> {commit.commit.message}
               </p>
