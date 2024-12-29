@@ -43,7 +43,7 @@ passport.use(
       callbackURL: callbackURL,
     },
     (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+      return done(null, profile, { accessToken });
     }
   )
 );
@@ -69,12 +69,16 @@ app.get(
   "/api/auth/github/callback",
   passport.authenticate("github", { failureRedirect: "/", session: false }),
   (req, res) => {
+    const accessToken = req.authInfo.accessToken;
+    const user = req.user;
+
     // JWT 생성
     const token = jwt.sign(
       {
-        id: req.user.id,
-        username: req.user.username,
-        avatar_url: req.user.photos[0].value,
+        id: user.id,
+        username: user.username,
+        avatar_url: user.photos[0].value,
+        accessToken: accessToken,
       },
       process.env.REACT_APP_JWT_SECRET,
       { expiresIn: "1h" }
@@ -108,6 +112,7 @@ app.get("/api/auth/profile", (req, res) => {
       id: decoded.id,
       username: decoded.username,
       avatar_url: decoded.avatar_url,
+      accessToken: decoded.accessToken,
     });
   } catch (error) {
     res.status(401).send("토큰이 유효하지 않습니다.");

@@ -20,7 +20,7 @@ export const RecentCommitsPage = () => {
     refetch: refetchRepos,
   } = useQuery({
     queryKey: ["userRepos", user.username],
-    queryFn: () => fetchUserRepos(user.username),
+    queryFn: () => fetchUserRepos(user.username, user.accessToken),
     enabled: !!user.username,
     retry: 1,
   });
@@ -39,7 +39,7 @@ export const RecentCommitsPage = () => {
       if (!repos) return []; // 저장소가 없으면 빈 배열 반환
       const allCommits = await Promise.all(
         repos.map((repo: any) =>
-          fetchCommits(user.username, repo.name).then(data =>
+          fetchCommits(user.username, repo.name, user.accessToken).then(data =>
             data
               .filter((commit: any) =>
                 commit.commit.author.date.startsWith(today)
@@ -60,66 +60,89 @@ export const RecentCommitsPage = () => {
   });
 
   return (
-    <div>
-      <h1>GitHub Polling</h1>
-
-      {/* 저장소 로딩/에러 상태 */}
-      {reposLoading && <p>Loading repositories...</p>}
-      {reposError && (
-        <p style={{ color: "red" }}>
-          Error loading repositories: {reposError.message}
-        </p>
-      )}
-      <button onClick={() => refetchRepos} disabled={reposLoading}>
-        Refresh Repositories
-      </button>
-
-      {/* 저장소 목록 출력 */}
-      <h2>Repositories</h2>
-      {repos ? (
-        <ul>
-          {repos.map((repo: any) => (
-            <li key={repo.id}>{repo.name}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No repositories found.</p>
-      )}
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        GitHub Polling
+      </h1>
 
       {/* 커밋 로딩/에러 상태 */}
-      {commitsLoading && <p>Loading commits...</p>}
+      {commitsLoading && (
+        <p className="text-center text-blue-500">Loading commits...</p>
+      )}
       {commitsError && (
-        <p style={{ color: "red" }}>
+        <p className="text-center text-red-500">
           Error loading commits: {commitsError.message}
         </p>
       )}
-      <button
-        onClick={() => refetchCommits}
-        disabled={commitsLoading || !repos}
-      >
-        Check Today Commits
-      </button>
 
-      {/* 커밋 데이터 출력 */}
-      <h2>Today Commits</h2>
+      <h2 className="text-xl font-semibold text-gray-700 mt-6">
+        Today Commits
+      </h2>
       {commits?.length ? (
-        <ul>
+        <ul className="space-y-4 mt-4">
           {commits.map((commit: any, index: number) => (
-            <li key={commit.sha || index}>
+            <li
+              key={commit.sha || index}
+              className="border border-gray-300 rounded-lg p-4"
+            >
               <p>
-                <strong>Repository:</strong> {commit.repoName}
+                <span className="font-bold text-gray-700">Repository:</span>{" "}
+                {commit.repoName}
               </p>
               <p>
-                <strong>Message:</strong> {commit.commit.message}
+                <span className="font-bold text-gray-700">Message:</span>{" "}
+                {commit.commit.message}
               </p>
               <p>
-                <strong>Date:</strong> {commit.commit.author.date}
+                <span className="font-bold text-gray-700">Date:</span>{" "}
+                {commit.commit.author.date}
               </p>
             </li>
           ))}
         </ul>
       ) : (
-        <p>No commits found for today.</p>
+        <p className="text-gray-500 mt-4">No commits found for today.</p>
+      )}
+
+      <button
+        onClick={() => refetchCommits()}
+        disabled={commitsLoading || !repos}
+        className="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 disabled:opacity-50 mt-6"
+      >
+        Check Today Commits
+      </button>
+
+      {/* 저장소 로딩/에러 상태 */}
+      {reposLoading && (
+        <p className="text-center text-blue-500 mt-6">
+          Loading repositories...
+        </p>
+      )}
+      {reposError && (
+        <p className="text-center text-red-500">
+          Error loading repositories: {reposError.message}
+        </p>
+      )}
+      <button
+        onClick={() => refetchRepos()}
+        disabled={reposLoading}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 disabled:opacity-50 mt-4"
+      >
+        Refresh Repositories
+      </button>
+
+      {/* 저장소 목록 출력 */}
+      <h2 className="text-xl font-semibold text-gray-700 mt-6">Repositories</h2>
+      {repos ? (
+        <ul className="list-disc pl-6 space-y-2">
+          {repos.map((repo: any) => (
+            <li key={repo.id} className="text-gray-600">
+              {repo.name}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-500">No repositories found.</p>
       )}
     </div>
   );
