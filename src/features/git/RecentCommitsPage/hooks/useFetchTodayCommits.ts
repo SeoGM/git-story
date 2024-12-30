@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchCommits } from "../../../../app/api/gitApi";
+import { fetchCommits } from "../../api/gitApi";
 
 export const useFetchTodayCommits = (
   username: string,

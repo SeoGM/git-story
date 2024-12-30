@@ -2,7 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../store";
 import { logout } from "../../features/auth/authSlice";
-import { redirectToGithubLogin, logoutRequest } from "../api/authApi";
+import {
+  redirectToGithubLogin,
+  logoutRequest,
+} from "../../features/auth/api/authApi";
 
 const Header = () => {
   const dispatch = useDispatch();

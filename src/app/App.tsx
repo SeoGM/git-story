@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProfile } from "./api/authApi";
+import { fetchUserProfile } from "../features/auth/api/authApi";
 import { login, logout } from "../features/auth/authSlice";
 
 import { RootState } from "./store";

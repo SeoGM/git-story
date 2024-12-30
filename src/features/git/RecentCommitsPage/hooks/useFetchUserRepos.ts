@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserRepos } from "../../../../app/api/gitApi";
+import { fetchUserRepos } from "../../api/gitApi";
 
 export const useFetchUserRepos = (username: string, accessToken: string) => {
   return useQuery({

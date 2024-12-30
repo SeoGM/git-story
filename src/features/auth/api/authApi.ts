@@ -1,6 +1,15 @@
-import { AxiosResponse } from "axios";
-import { UserProfile } from "../../features/auth/types";
-import api, { baseURL } from "./index";
+import axios, { AxiosResponse } from "axios";
+import { UserProfile } from "../types";
+
+const baseURL =
+  process.env.REACT_APP_APP_ENV === "vercel"
+    ? "https://git-story-rouge.vercel.app"
+    : "https://4000-seogm-gitstory-1ayu6plkg6n.ws-us117.gitpod.io";
+
+const api = axios.create({
+  baseURL: baseURL,
+  withCredentials: true,
+});
 
 export const redirectToGithubLogin = (): string => {
   return (window.location.href = `${baseURL}/api/auth/github`);
