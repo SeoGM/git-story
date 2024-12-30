@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile } from "./api/authApi";
 import { login, logout } from "../features/auth/authSlice";
 
-import Header from "./layouts/Header";
-import PublicPage from "../features/public/pages/PublicPage";
 import { RootState } from "./store";
-import { RecentCommitsPage } from "../features/git/pages/RecentCommitsPage";
+import Header from "./layouts/Header";
+import PublicPage from "../features/public/PublicPage";
+import RecentCommitsPage from "../features/git/RecentCommitsPage";
 
 const App = () => {
   const dispatch = useDispatch();
