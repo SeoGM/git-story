@@ -8,6 +8,7 @@ import { RootState } from "./store";
 import Header from "./layouts/Header";
 import PublicPage from "../features/public/PublicPage";
 import RecentCommitsPage from "../features/git/RecentCommitsPage";
+import RepoCommitsPage from "../features/git/RepoCommitsPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,10 @@ const App = () => {
         <Route
           path="/"
           element={isAuthenticated ? <RecentCommitsPage /> : <PublicPage />}
+        />
+        <Route
+          path="/:username/:repoName/commits"
+          element={<RepoCommitsPage />}
         />
       </Routes>
     </Router>

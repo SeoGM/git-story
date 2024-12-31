@@ -41,6 +41,7 @@ function RecentCommitsPage() {
       />
 
       <RepositoriesList
+        username={user.username}
         repos={repos}
         isLoading={reposLoading}
         error={reposError}

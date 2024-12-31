@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 type Repository = {
   id: string;
@@ -6,6 +7,7 @@ type Repository = {
 };
 
 interface RepositoriesListProps {
+  username: string;
   repos: Repository[];
   isLoading: boolean;
   error: any;
@@ -13,11 +15,17 @@ interface RepositoriesListProps {
 }
 
 function RepositoriesList({
+  username,
   repos,
   isLoading,
   error,
   refetch,
 }: RepositoriesListProps) {
+  const navigate = useNavigate();
+
+  const handleRepoClick = (repoName: string) => {
+    navigate(`/${username}/${repoName}/commits`);
+  };
   return (
     <div>
       <h2 className="text-xl font-semibold text-gray-700 mt-6">Repositories</h2>
@@ -32,7 +40,11 @@ function RepositoriesList({
       {repos.length ? (
         <ul className="list-disc pl-6 space-y-2">
           {repos.map(repo => (
-            <li key={repo.id} className="text-gray-600">
+            <li
+              key={repo.id}
+              className="text-gray-600"
+              onClick={() => handleRepoClick(repo.name)}
+            >
               {repo.name}
             </li>
           ))}

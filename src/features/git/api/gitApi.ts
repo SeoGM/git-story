@@ -16,11 +16,11 @@ export const fetchUserRepos = async (username: string, accessToken: string) => {
 };
 
 export const fetchCommits = async (
-  owner: string,
+  username: string,
   repo: string,
   accessToken: string
 ) => {
-  const response = await api.get(`/repos/${owner}/${repo}/commits`, {
+  const response = await api.get(`/repos/${username}/${repo}/commits`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -29,12 +29,12 @@ export const fetchCommits = async (
 };
 
 export const fetchCommitDetails = async (
-  owner: string,
+  username: string,
   repo: string,
   sha: string,
   accessToken: string
 ) => {
-  const response = await api.get(`/repos/${owner}/${repo}/commits/${sha}`, {
+  const response = await api.get(`/repos/${username}/${repo}/commits/${sha}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
