@@ -9,6 +9,7 @@ import Header from "./layouts/Header";
 import PublicPage from "../features/public/PublicPage";
 import RecentCommitsPage from "../features/git/RecentCommitsPage";
 import RepoCommitsPage from "../features/git/RepoCommitsPage";
+import CommitDetailPage from "../features/git/CommitDetailPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -39,9 +40,10 @@ const App = () => {
           path="/"
           element={isAuthenticated ? <RecentCommitsPage /> : <PublicPage />}
         />
+        <Route path="/:username/:repo/commits" element={<RepoCommitsPage />} />
         <Route
-          path="/:username/:repoName/commits"
-          element={<RepoCommitsPage />}
+          path="/:username/:repo/commit/:sha"
+          element={<CommitDetailPage />}
         />
       </Routes>
     </Router>

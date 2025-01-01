@@ -28,7 +28,7 @@ export const fetchCommits = async (
   return response.data;
 };
 
-export const fetchCommitDetails = async (
+export const fetchCommitDetail = async (
   username: string,
   repo: string,
   sha: string,
