@@ -1,21 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { useFetchCommitDetail } from "./hooks/useFetchCommitDetail";
 import { renderDiff } from "../../../utils/renderDiff";
+import { generateBlogPost } from "../../../utils/generateBlogPost";
 
 const CommitDetailPage = () => {
   const { username, repo, sha } = useParams();
   const accessToken = useSelector(
     (state: RootState) => state.auth.user?.accessToken
   );
-
   const {
     data: commitDetail,
     isLoading,
     error,
   } = useFetchCommitDetail(username!, repo!, sha!, accessToken!);
+
+  const [blogPost, setBlogPost] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const handleGenerateBlog = async () => {
+    if (!commitDetail) return;
+
+    setIsGenerating(true);
+    try {
+      const blogContent = await generateBlogPost(
+        commitDetail.commit.message,
+        commitDetail.files
+      );
+      setBlogPost(blogContent);
+    } catch (err) {
+      console.error("Error generating blog post:", err);
+      setBlogPost("Failed to generate blog post. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -102,6 +122,24 @@ const CommitDetailPage = () => {
               <p className="text-gray-500">No files changed in this commit.</p>
             )}
           </div>
+
+          {/* Generate Blog Section */}
+          <button
+            onClick={handleGenerateBlog}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 disabled:opacity-50"
+            disabled={isGenerating}
+          >
+            {isGenerating ? "Generating Blog..." : "Generate Blog Post"}
+          </button>
+
+          {blogPost && (
+            <div className="mt-6 border border-gray-300 rounded-lg p-4">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                Generated Blog Post
+              </h2>
+              <p className="text-gray-700 whitespace-pre-wrap">{blogPost}</p>
+            </div>
+          )}
         </div>
       )}
     </div>
