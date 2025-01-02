@@ -1,7 +1,8 @@
 import React from "react";
+import MarkdownViewer from "./components/MarkdownViewer";
 
 const PublicPage = () => {
-  return <div>PublicPage</div>;
+  return <MarkdownViewer />;
 };
 
 export default PublicPage;
